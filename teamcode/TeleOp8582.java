@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -52,6 +52,7 @@ public class TeleOp8582 extends LinearOpMode {
            robot.frontDrive.setPower(gamepad1.right_stick_x);
            robot.backDrive.setPower(gamepad1.left_stick_x);
            robot.lift.setPower(gamepad2.right_stick_y);
+            robot.lift.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
 
 
             /*if ((clawCurrState) && (clawCurrState != clawPrevState)) {   //button is transitioning to a pressed state

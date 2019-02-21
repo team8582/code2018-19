@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -49,15 +49,15 @@ public class backup extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        robot.corral.setPower(0.0);
-        lift(DRIVE_SPEED, -.4, 10);
-        frontBackDrive(DRIVE_SPEED, -.05, -.05, 2);
-        encoderDrive(DRIVE_SPEED, 2, 2,10);
-        /*frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
-        frontBackDrive(DRIVE_SPEED, -0.32, -0.32, 2); //move left
-        */
-        //robot.corral.setPosition(0.9);
+        //robot.corral.setPower(0.0);
+        lift(DRIVE_SPEED, -.26, 10);
+        frontBackDrive(DRIVE_SPEED, -.03, -.03, 2); //front and back wheels
+        encoderDrive(DRIVE_SPEED, .48, .48,9);
+        //frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
 
+        /* test for color sensor
+        encoderDrive(DRIVE_SPEED, .35, .35,9); //stop in front of mineral
+         */
 
         idle();
 
