@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teamcode;
+package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
 public class Hardware8582 {
@@ -22,6 +23,7 @@ public class Hardware8582 {
 
     //public CRServo corral = null;
 
+    ColorSensor colorSensor;
 
     HardwareMap hwMap8582 = null;
 
@@ -48,6 +50,7 @@ public class Hardware8582 {
 
         lift.setDirection(DcMotor.Direction.REVERSE);
 
+        colorSensor = ahwMap.colorSensor.get("color");
         //corral = hwMap8582.get(CRServo.class, "corral");
         //corral.setPower(0.0);
 

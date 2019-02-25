@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -13,9 +13,9 @@ import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="backup")
-public class backup extends LinearOpMode {
-    Hardware8582 robot = new Hardware8582();
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="ColorTest")
+public class ColorTest extends LinearOpMode {
+    HardwareColorTest robot = new HardwareColorTest();
     private ElapsedTime runtime = new ElapsedTime();       //Create variable to keep track of elapsed time.
     static final double DRIVE_SPEED = 0.7;
     static final double TURN_SPEED = 0.5;
@@ -28,43 +28,68 @@ public class backup extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
+
+        robot.colorSensor.enableLed(true); //turn on LED which causes jewel to reflect wavelengths for the sensor to read
+
         //turn on encoders
-        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        idle();
+        //idle();
 
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        //robot.corral.setPower(0.0);
-        lift(DRIVE_SPEED, -.26, 10);
-        frontBackDrive(DRIVE_SPEED, -.03, -.03, 2); //front and back wheels
-        encoderDrive(DRIVE_SPEED, .48, .48,9);
-        //frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
+        // robot.corral.setPower(0.0);
+        //lift(DRIVE_SPEED, -.4, 10);
+        //frontBackDrive(DRIVE_SPEED, -.05, -.05, 2);
+        //encoderDrive(DRIVE_SPEED, 2, 2,10);
+        /*frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
+        frontBackDrive(DRIVE_SPEED, -0.32, -0.32, 2); //move left
+        */
+        //robot.corral.setPosition(0.9);
 
-        /* test for color sensor
-        encoderDrive(DRIVE_SPEED, .35, .35,9); //stop in front of mineral
-         */
 
-        idle();
+        //idle();
+
+        while(opModeIsActive()) {
+            //variables for different color reading
+            int redValue = robot.colorSensor.red();
+            int greenValue = robot.colorSensor.green();
+            int blueValue = robot.colorSensor.blue();
+            boolean isYellow = ((redValue > blueValue * 2) && (greenValue > blueValue));   //jewel is yellow
+
+            //displays color data to driver
+            telemetry.addData("greenValue:  ", greenValue);
+            telemetry.addData("redValue: ", redValue);
+            telemetry.addData("blueValue: ", blueValue);
+            telemetry.addData("is Yellow:", isYellow);
+            telemetry.update();
+        }
+
+        /*if(!isYellow)
+            frontBackDrive(DRIVE_SPEED, -1, -1, 2);
+        else
+            encoderDrive(DRIVE_SPEED, 2, 2, 10);
+
+        encoderDrive(DRIVE_SPEED, 2, 2, 10);*/
 
 
     }
 
-    public void frontBackDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
+    /*public void frontBackDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
         int newLeftTarget; //declare variable for the target position of the left motor
         int newRightTarget; //declare variable for the target position of the right motor
 
@@ -226,7 +251,7 @@ public class backup extends LinearOpMode {
         }
 
     }
-
+*/
 
 }
 

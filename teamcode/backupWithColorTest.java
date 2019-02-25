@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="backup")
-public class backup extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="backupWithColorTest")
+public class backupWithColorTest extends LinearOpMode {
     Hardware8582 robot = new Hardware8582();
     private ElapsedTime runtime = new ElapsedTime();       //Create variable to keep track of elapsed time.
     static final double DRIVE_SPEED = 0.7;
@@ -28,6 +28,9 @@ public class backup extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
+
+        robot.colorSensor.enableLed(true); //turn on LED which causes jewel to reflect wavelengths for the sensor to read
+
         //turn on encoders
         robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,15 +52,45 @@ public class backup extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        //robot.corral.setPower(0.0);
-        lift(DRIVE_SPEED, -.26, 10);
-        frontBackDrive(DRIVE_SPEED, -.03, -.03, 2); //front and back wheels
-        encoderDrive(DRIVE_SPEED, .48, .48,9);
-        //frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
+
+        while(opModeIsActive()) {
+            //variables for different color reading
+            int redValue = robot.colorSensor.red();
+            int greenValue = robot.colorSensor.green();
+            int blueValue = robot.colorSensor.blue();
+            boolean isYellow = false;   //jewel is yellow
+            if(((redValue > blueValue * 2) && (greenValue > blueValue)))
+                isYellow = true;
+
+            //displays color data to driver
+            telemetry.addData("greenValue:  ", greenValue);
+            telemetry.addData("redValue: ", redValue);
+            telemetry.addData("blueValue: ", blueValue);
+            telemetry.addData("is Yellow:", isYellow);
+            telemetry.update();
+
+
+            //robot.corral.setPower(0.0);
+            lift(DRIVE_SPEED, -.26, 10);
+            frontBackDrive(DRIVE_SPEED, -.03, -.03, 2); //front and back wheels
+            encoderDrive(DRIVE_SPEED, .15, .15,9);
+            frontBackDrive(DRIVE_SPEED, -0.07, -0.07, 2);
 
         /* test for color sensor
         encoderDrive(DRIVE_SPEED, .35, .35,9); //stop in front of mineral
          */
+        while(!isYellow) {
+            if(((redValue > blueValue * 2) && (greenValue > blueValue)))
+                isYellow = true;
+            telemetry.update();
+
+            if (isYellow)
+                encoderDrive(DRIVE_SPEED, .15, .15, 9);
+            else
+                frontBackDrive(DRIVE_SPEED, 0.07, 0.07, 2);
+
+        }
+        }
 
         idle();
 
@@ -97,12 +130,12 @@ public class backup extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.backDrive.isBusy() && robot.frontDrive.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.frontDrive.getCurrentPosition(),
                         robot.backDrive.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 //idle();
@@ -152,12 +185,12 @@ public class backup extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.leftDrive.getCurrentPosition(),
                         robot.rightDrive.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 idle();
@@ -205,10 +238,10 @@ public class backup extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.lift.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d", target);
                 telemetry.addData("Path2", "Running at %7d", robot.lift.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 //idle();
