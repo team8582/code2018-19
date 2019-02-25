@@ -73,7 +73,7 @@ public class backupWithColorTest extends LinearOpMode {
             //robot.corral.setPower(0.0);
             lift(DRIVE_SPEED, -.26, 10);
             frontBackDrive(DRIVE_SPEED, -.03, -.03, 2); //front and back wheels
-            encoderDrive(DRIVE_SPEED, .15, .15,9);
+            encoderDrive(DRIVE_SPEED, .162, .162,9);
             frontBackDrive(DRIVE_SPEED, -0.07, -0.07, 2);
 
         /* test for color sensor
@@ -82,12 +82,14 @@ public class backupWithColorTest extends LinearOpMode {
         while(!isYellow) {
             if(((redValue > blueValue * 2) && (greenValue > blueValue)))
                 isYellow = true;
+
+            telemetry.clear();
             telemetry.update();
 
             if (isYellow)
-                encoderDrive(DRIVE_SPEED, .15, .15, 9);
+                encoderDrive(DRIVE_SPEED, .17, .17, 9);
             else
-                frontBackDrive(DRIVE_SPEED, 0.07, 0.07, 2);
+                frontBackDrive(DRIVE_SPEED, 0.15, 0.15, 2);
 
         }
         }
