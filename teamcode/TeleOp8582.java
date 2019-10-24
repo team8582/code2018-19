@@ -51,20 +51,20 @@ public class TeleOp8582 extends LinearOpMode {
             robot.rightDrive.setPower(gamepad1.right_stick_y);
             robot.frontDrive.setPower(gamepad1.right_stick_x);
             robot.backDrive.setPower(gamepad1.left_stick_x);
-            robot.lift.setPower(gamepad2.right_stick_y);
-            robot.lift.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
+            //robot.lift.setPower(gamepad2.right_stick_y);
+            //robot.lift.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
             
             if(gamepad1.left_bumper)
             {
-                robot.lift.setTargetPosition(-3375);
-                robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.lift.setPower(1);
-                while (opModeIsActive() && (robot.lift.isBusy()))
+                //robot.lift.setTargetPosition(-3375);
+                //robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //robot.lift.setPower(1);
+                while (opModeIsActive())// && (robot.lift.isBusy()))
                 {
                     //do nothing while lift is moving
                 }
-                robot.lift.setPower(0);
-                robot.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                //robot.lift.setPower(0);
+                //robot.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 
             }
             

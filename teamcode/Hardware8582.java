@@ -19,7 +19,7 @@ public class Hardware8582 {
     public DcMotor backDrive= null;
 
 
-    public DcMotor lift = null;
+    //public DcMotor lift = null;
 
     //public CRServo corral = null;
 
@@ -41,16 +41,16 @@ public class Hardware8582 {
         rightDrive = hwMap8582.get(DcMotor.class, "rightDrive");
         frontDrive = hwMap8582.get(DcMotor.class, "frontDrive");
         backDrive = hwMap8582.get(DcMotor.class, "backDrive");
-        lift = hwMap8582.get(DcMotor.class, "lift");
+        //lift = hwMap8582.get(DcMotor.class, "lift");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         frontDrive.setDirection(DcMotor.Direction.REVERSE);
         backDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        lift.setDirection(DcMotor.Direction.REVERSE);
+        //lift.setDirection(DcMotor.Direction.REVERSE);
 
-        colorSensor = ahwMap.colorSensor.get("color");
+        //colorSensor = ahwMap.colorSensor.get("color");
         //corral = hwMap8582.get(CRServo.class, "corral");
         //corral.setPower(0.0);
 

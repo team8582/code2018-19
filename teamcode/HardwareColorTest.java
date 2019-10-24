@@ -23,7 +23,7 @@ public class HardwareColorTest {
 
     //public CRServo corral = null;
 
-    ColorSensor colorSensor;
+    //ColorSensor colorSensor;
 
     HardwareMap hwMapColorTest = null;
     private ElapsedTime period = new ElapsedTime();
@@ -33,7 +33,7 @@ public class HardwareColorTest {
     }
 
     public void init(HardwareMap ahwMap) {
-        hwMapColorTest = ahwMap;
+        //hwMapColorTest = ahwMap;
 
         // leftDrive = hwMap8582.get(DcMotor.class, "leftDrive");
         // rightDrive = hwMap8582.get(DcMotor.class, "rightDrive");
@@ -48,7 +48,7 @@ public class HardwareColorTest {
 
         // lift.setDirection(DcMotor.Direction.REVERSE);
 
-        colorSensor = hwMapColorTest.colorSensor.get("color");
+        //colorSensor = hwMapColorTest.colorSensor.get("color");
         //corral = hwMap8582.get(CRServo.class, "corral");
         //corral.setPower(0.0);
 

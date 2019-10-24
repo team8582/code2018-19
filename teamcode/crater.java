@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="ColorTest")
-public class ColorTest extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="crater")
+public class crater extends LinearOpMode {
     Hardware8582 robot = new Hardware8582();
     private ElapsedTime runtime = new ElapsedTime();       //Create variable to keep track of elapsed time.
     static final double DRIVE_SPEED = 0.7;
@@ -32,87 +32,109 @@ public class ColorTest extends LinearOpMode {
         //robot.colorSensor.enableLed(true); //turn on LED which causes jewel to reflect wavelengths for the sensor to read
 
         //turn on encoders
-        //robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        //idle();
+        idle();
 
-        //robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-
+        boolean yellowFound = false;
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        // robot.corral.setPower(0.0);
-        //lift(DRIVE_SPEED, -.4, 10);
-        //frontBackDrive(DRIVE_SPEED, -.05, -.05, 2);
-        //encoderDrive(DRIVE_SPEED, 2, 2,10);
-        /*frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
-        frontBackDrive(DRIVE_SPEED, -0.32, -0.32, 2); //move left
-        */
-        //robot.corral.setPosition(0.9);
 
+        /*//variables for different color reading
+        int redValue = robot.colorSensor.red();
+        int greenValue = robot.colorSensor.green();
+        int blueValue = robot.colorSensor.blue();
+        boolean isYellow = false;   //jewel is yellow
+        if (((redValue > blueValue * 2) && (greenValue > blueValue)))
+            isYellow = true;
 
-        //idle();
-
-        telemetry.addData("position: ", "before first move: ");
-        telemetry.update();
-
-
-        //while(opModeIsActive()) {
-        //    robot.corral.setPower(0.79);
-        telemetry.addData("position: ", "after first move: ");
-        telemetry.update();
-            sleep(500);
-        telemetry.addData("position: ", "after first sleep: ");
-        telemetry.update();
-        /*    robot.corral.setPower(0.79);
-        telemetry.addData("position: ", "after second move: ");
-        telemetry.update();
-            sleep(3000);
-        telemetry.addData("position: ", "after second sleep: ");
+        //displays color data to driver
+        telemetry.addData("greenValue:  ", greenValue);
+        telemetry.addData("redValue: ", redValue);
+        telemetry.addData("blueValue: ", blueValue);
+        telemetry.addData("is Yellow:", isYellow);
         telemetry.update();*/
-        //}
 
 
+        //robot.corral.setPower(0.0);
+        lift(DRIVE_SPEED, -.26, 10);
+        frontBackDrive(DRIVE_SPEED, -.03, -.03, 2); //front and back wheels
+        encoderDrive(DRIVE_SPEED, .1375, .1375, 9); //go from lander to mineral row
+        lift(DRIVE_SPEED, .26, 10);
+        frontBackDrive(DRIVE_SPEED, -0.07, -0.07, 2);
+        encoderDrive(DRIVE_SPEED, .015, .015, 2);
 
-
-
-        /*while(opModeIsActive()) {
-            //variables for different color reading
-            int redValue = robot.colorSensor.red();
-            int greenValue = robot.colorSensor.green();
-            int blueValue = robot.colorSensor.blue();
-            boolean isYellow = ((redValue > blueValue * 2) && (greenValue > blueValue));   //jewel is yellow
-
-            //displays color data to driver
-            telemetry.addData("greenValue:  ", greenValue);
-            telemetry.addData("redValue: ", redValue);
-            telemetry.addData("blueValue: ", blueValue);
-            telemetry.addData("is Yellow:", isYellow);
-            telemetry.update();
+        sleep(1000);
+        yellowFound = isYellow();
+        if(yellowFound) {
+            encoderDrive(DRIVE_SPEED, .1875, .1875, 9);
+            //encoderDrive(DRIVE_SPEED, -.1, .1, 9);
+            //robot.corral.setPower(0.79);
+            //sleep(600);
+            //robot.corral.setPower(0);
+            encoderDrive(DRIVE_SPEED, .025, .025, 9); //deposit marker and go back
         }
-
-        /*if(!isYellow)
-            frontBackDrive(DRIVE_SPEED, -1, -1, 2);
-        else
-            encoderDrive(DRIVE_SPEED, 2, 2, 10);
-
-        encoderDrive(DRIVE_SPEED, 2, 2, 10);*/
-
+        else {
+            encoderDrive(DRIVE_SPEED, -.015, -.015, 2); //inch back
+            frontBackDrive(DRIVE_SPEED, 0.11, 0.11, 2); //go from one to two
+            encoderDrive(DRIVE_SPEED, .0275, .0275, 2); //inch up
+            sleep(500);
+            yellowFound = isYellow();
+            /*if(!isYellow()) {
+                encoderDrive(DRIVE_SPEED, -.0275, -.0275, 2); //inch back
+                frontBackDrive(DRIVE_SPEED, .01, .01, 2);
+                encoderDrive(DRIVE_SPEED, .0275, .0275, 2); //inch up
+                sleep(500);
+                yellowFound = isYellow();
+            }
+            if(!isYellow()) {
+                encoderDrive(DRIVE_SPEED, -.0275, -.0275, 2); //inch back
+                frontBackDrive(DRIVE_SPEED, .01, .01, 2);
+                encoderDrive(DRIVE_SPEED, .0275, .0275, 2); //inch up
+                sleep(500);
+                yellowFound = isYellow();
+            }*/
+            if (yellowFound) {
+                encoderDrive(DRIVE_SPEED, .1875, .1875, 9);
+                //encoderDrive(DRIVE_SPEED, -.15, .15, 9);
+                //robot.corral.setPower(0.79);
+                //sleep(600);
+                //robot.corral.setPower(0);
+                encoderDrive(DRIVE_SPEED, .05, .05, 9); //deposit marker and go back
+            }
+            else {
+                encoderDrive(DRIVE_SPEED, -.025, -.025, 2);
+                frontBackDrive(DRIVE_SPEED, 0.1, 0.1, 2);
+                encoderDrive(DRIVE_SPEED, .1875, .1875, 9); //knock mineral
+                //encoderDrive(DRIVE_SPEED, .15, -.15, 9); //turn to depot
+                //encoderDrive(DRIVE_SPEED, -.1875, -.1875, 9); //go into depot
+                //robot.corral.setPower(0.79);
+                //sleep(600);
+                //robot.corral.setPower(0);
+                encoderDrive(DRIVE_SPEED, .05, .05, 9); //deposit marker and go back
+            }
+        }
+        /* test for color sensor
+        encoderDrive(DRIVE_SPEED, .35, .35,9); //stop in front of mineral
+         */
+        sleep(500);
+        idle();
 
     }
 
-    /*public void frontBackDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
+    public void frontBackDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
         int newLeftTarget; //declare variable for the target position of the left motor
         int newRightTarget; //declare variable for the target position of the right motor
 
@@ -145,12 +167,12 @@ public class ColorTest extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.backDrive.isBusy() && robot.frontDrive.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.frontDrive.getCurrentPosition(),
                         robot.backDrive.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 //idle();
@@ -200,12 +222,12 @@ public class ColorTest extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.leftDrive.getCurrentPosition(),
                         robot.rightDrive.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 idle();
@@ -232,49 +254,67 @@ public class ColorTest extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            target = robot.lift.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH); //initializes target to represent the desired distance travelled by the lift motor
+            //target = robot.lift.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH); //initializes target to represent the desired distance travelled by the lift motor
 
             //sets the motor to run to the position
-            robot.lift.setTargetPosition(target);
+            //robot.lift.setTargetPosition(target);
 
 
             // Turn On RUN_TO_POSITION
-            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.lift.setPower(Math.abs(speed));
+            //robot.lift.setPower(Math.abs(speed));
 
 
 
             // keep looping while still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.lift.isBusy())) {
+                    (runtime.seconds() < timeoutS)) {//&&
+                    //(robot.lift.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d", target);
                 telemetry.addData("Path2", "Running at %7d", robot.lift.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 //idle();
             }
 
             // Stop all motion;
-            robot.lift.setPower(0);
+            //robot.lift.setPower(0);
 
 
             // Turn off RUN_TO_POSITION
-            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
             sleep(200);   // optional pause after each move
         }
 
     }
-*/
+    public boolean isYellow()
+    {
+        //variables for different color reading
+        //int redValue = robot.colorSensor.red();
+        //int greenValue = robot.colorSensor.green();
+        //int blueValue = robot.colorSensor.blue();
+        boolean isYellow = false;   //jewel is yellow
+        //if (((redValue > blueValue * 2) && (greenValue > blueValue)))
+         //   isYellow = true;
+
+        //displays color data to driver
+        //telemetry.addData("greenValue:  ", greenValue);
+        //telemetry.addData("redValue: ", redValue);
+        //telemetry.addData("blueValue: ", blueValue);
+        telemetry.addData("is Yellow:", isYellow);
+        telemetry.update();
+
+        return isYellow;
+    }
 
 }
 

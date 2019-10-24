@@ -33,7 +33,7 @@ public class backup extends LinearOpMode {
         robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         idle();
@@ -42,7 +42,7 @@ public class backup extends LinearOpMode {
         robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -184,30 +184,30 @@ public class backup extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            target = robot.lift.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH); //initializes target to represent the desired distance travelled by the lift motor
+            //target = robot.lift.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH); //initializes target to represent the desired distance travelled by the lift motor
 
             //sets the motor to run to the position
-            robot.lift.setTargetPosition(target);
+            //robot.lift.setTargetPosition(target);
 
 
             // Turn On RUN_TO_POSITION
-            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.lift.setPower(Math.abs(speed));
+            //robot.lift.setPower(Math.abs(speed));
 
 
 
             // keep looping while still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.lift.isBusy())) {
+                    (runtime.seconds() < timeoutS)){// &&
+                    //(robot.lift.isBusy())) {
 
                 // Display postion on path to the driver.
-                telemetry.addData("Path1", "Running to %7d", target);
-                telemetry.addData("Path2", "Running at %7d", robot.lift.getCurrentPosition());
+                //telemetry.addData("Path1", "Running to %7d", target);
+                //telemetry.addData("Path2", "Running at %7d", robot.lift.getCurrentPosition());
                 telemetry.update();
 
                 // Allow time for other processes to run.
@@ -215,11 +215,11 @@ public class backup extends LinearOpMode {
             }
 
             // Stop all motion;
-            robot.lift.setPower(0);
+            //robot.lift.setPower(0);
 
 
             // Turn off RUN_TO_POSITION
-            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
             sleep(200);   // optional pause after each move
