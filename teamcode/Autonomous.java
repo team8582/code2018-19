@@ -4,17 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="ColorTest")
-public class ColorTest extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Autonomous")
+public class Autonomous extends LinearOpMode {
     Hardware8582 robot = new Hardware8582();
     private ElapsedTime runtime = new ElapsedTime();       //Create variable to keep track of elapsed time.
     static final double DRIVE_SPEED = 0.7;
@@ -32,44 +34,32 @@ public class ColorTest extends LinearOpMode {
         robot.color.enableLed(true); //turn on LED which causes jewel to reflect wavelengths for the sensor to read
 
         //turn on encoders
-        //robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.backDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.liftTop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        //idle();
+        idle();
 
-        //robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
+        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.backDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.liftTop.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        // robot.corral.setPower(0.0);
-        //lift(DRIVE_SPEED, -.4, 10);
-        //frontBackDrive(DRIVE_SPEED, -.05, -.05, 2);
-        //encoderDrive(DRIVE_SPEED, 2, 2,10);
-        /*frontBackDrive(DRIVE_SPEED, -0.07, 0.07, 2); //spin
-        frontBackDrive(DRIVE_SPEED, -0.32, -0.32, 2); //move left
-        */
-        //robot.corral.setPosition(0.9);
 
+        while (opModeIsActive()) {
 
-        //idle();
-
-        while(opModeIsActive()) {
             //variables for different color reading
             int redValue = robot.color.red();
             int greenValue = robot.color.green();
             int blueValue = robot.color.blue();
-            boolean isYellow = ((redValue > blueValue + 10) && (greenValue > blueValue));   //jewel is yellow
+            boolean isYellow = ((redValue > blueValue * 2) && (greenValue > blueValue));   //jewel is yellow
 
             //displays color data to driver
             telemetry.addData("greenValue:  ", greenValue);
@@ -77,19 +67,40 @@ public class ColorTest extends LinearOpMode {
             telemetry.addData("blueValue: ", blueValue);
             telemetry.addData("is Yellow:", isYellow);
             telemetry.update();
+
+
+            telemetry.addData("range", String.format("%.01f in", robot.dist.getDistance(DistanceUnit.INCH)));
+            while(robot.dist.getDistance(DistanceUnit.INCH)>2)
+            {
+                //drive forward --> either encoderdrive or frontbackdrive --> change their names
+            }
+
+            int skystoneCount = 0;
+
+            while(skystoneCount<1)
+            {
+                if(robot.dist.getDistance(DistanceUnit.INCH)>2 || (robot.dist.getDistance(DistanceUnit.INCH)<2 && isYellow))
+                {
+                    //drive to next block
+                }
+                else if(robot.dist.getDistance(DistanceUnit.INCH)<2 && !isYellow)
+                {
+                    //grab block/raise lift
+                    // drive directly forward OR use tick count to go back to beginning???
+                    //strafe into build site
+                    //turn 180
+                    //inch forward
+                    //drop block
+                    //strafe to back wall
+                    //arm back down
+                    //pull foundation
+                }
+            }
         }
-
-        /*if(!isYellow)
-            frontBackDrive(DRIVE_SPEED, -1, -1, 2);
-        else
-            encoderDrive(DRIVE_SPEED, 2, 2, 10);
-
-        encoderDrive(DRIVE_SPEED, 2, 2, 10);*/
-
-
     }
 
-    /*public void frontBackDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
+    //does this drive forward/back or left/right
+    public void frontBackDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
         int newLeftTarget; //declare variable for the target position of the left motor
         int newRightTarget; //declare variable for the target position of the right motor
 
@@ -122,12 +133,12 @@ public class ColorTest extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.backDrive.isBusy() && robot.frontDrive.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.frontDrive.getCurrentPosition(),
                         robot.backDrive.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 //idle();
@@ -145,6 +156,7 @@ public class ColorTest extends LinearOpMode {
             sleep(200);   // optional pause after each move
         }
     }
+
 
     public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) throws InterruptedException {
 
@@ -177,12 +189,12 @@ public class ColorTest extends LinearOpMode {
                     (runtime.seconds() < timeoutS) &&
                     (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
 
-                // Display postion on path to the driver.
+                /*// Display postion on path to the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
                         robot.leftDrive.getCurrentPosition(),
                         robot.rightDrive.getCurrentPosition());
-                telemetry.update();
+                telemetry.update();*/
 
                 // Allow time for other processes to run.
                 idle();
@@ -201,57 +213,5 @@ public class ColorTest extends LinearOpMode {
         }
     }
 
-    public void lift(double speed, double inches, double timeoutS)
-    {
-        int target;
-
-
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            target = robot.lift.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH); //initializes target to represent the desired distance travelled by the lift motor
-
-            //sets the motor to run to the position
-            robot.lift.setTargetPosition(target);
-
-
-            // Turn On RUN_TO_POSITION
-            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-            // reset the timeout time and start motion.
-            runtime.reset();
-            robot.lift.setPower(Math.abs(speed));
-
-
-
-            // keep looping while still active, and there is time left, and both motors are running.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.lift.isBusy())) {
-
-                // Display postion on path to the driver.
-                telemetry.addData("Path1", "Running to %7d", target);
-                telemetry.addData("Path2", "Running at %7d", robot.lift.getCurrentPosition());
-                telemetry.update();
-
-                // Allow time for other processes to run.
-                //idle();
-            }
-
-            // Stop all motion;
-            robot.lift.setPower(0);
-
-
-            // Turn off RUN_TO_POSITION
-            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-            sleep(200);   // optional pause after each move
-        }
-
-    }
-*/
 
 }
-

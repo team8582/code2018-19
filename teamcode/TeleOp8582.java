@@ -30,84 +30,53 @@ public class TeleOp8582 extends LinearOpMode {
         robot.init(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        
-        //constants (change as needed)
-        
+
+
+        //constants (change as needed) --> boolean values for claw/grabber here
         boolean clawPrevState = false;    //claw servos previous state variable
         boolean clawCurrState = false;    //claw servos current state variable
         boolean clawServo = false;        //claw servos is in open position
-        
-        //boolean openPrevState = false;
-        //boolean openCurrState = false;
-        //boolean openPosition = false;
-        
+
+        double OPEN = -1.0;     //left servo open position
+        final double CLOSE = .9;   //left servo closed position
+
+
         waitForStart();
         runtime.reset();
         
         while (opModeIsActive()) {
             telemetry.update();
-            
+
+            // set wheel motors
             robot.leftDrive.setPower(gamepad1.left_stick_y);
             robot.rightDrive.setPower(gamepad1.right_stick_y);
             robot.frontDrive.setPower(gamepad1.right_stick_x);
             robot.backDrive.setPower(gamepad1.left_stick_x);
-            //robot.lift.setPower(gamepad2.right_stick_y);
-            //robot.lift.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
-            
-            if(gamepad1.left_bumper)
-            {
-                //robot.lift.setTargetPosition(-3375);
-                //robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //robot.lift.setPower(1);
-                while (opModeIsActive())// && (robot.lift.isBusy()))
-                {
-                    //do nothing while lift is moving
-                }
-                //robot.lift.setPower(0);
-                //robot.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                
+
+            //set lift motors
+            robot.liftTop.setPower(gamepad2.right_stick_y);
+            //robot.liftBottom.setPower(gamepad2.right_stick_y);
+
+            //set current state of the claw to the state of the A button on gamepad2
+            clawCurrState = !gamepad2.a;
+            telemetry.addData("gamepad 2 a value:", gamepad2.a);
+
+            //set servo
+            if ((clawCurrState) && (clawCurrState != clawPrevState)) {   //button is transitioning to a pressed state
+                clawServo = !clawServo;  //variable goes from false to true, so the servos should close
             }
-            
-            //&& (runtime.seconds() < 5)
-            
-            /*if ((clawCurrState) && (clawCurrState != clawPrevState)) {   //button is transitioning to a pressed state
-             clawServo = !clawServo;  //variable goes from false to true, so the servos should close
-             }
-             // update previous state variable.
-             clawPrevState = clawCurrState;
-             if (clawServo) {
-             robot.corral.setPower(-.5);
-             sleep(300);
-             robot.corral.setPower(0);
-             }
-             else {
-             
-             robot.corral.setPower(.5);
-             sleep(300);
-             robot.corral.setPower(0);
-             //set servos to open position
-             
-             }
-             */
-            
-            /* if ((openCurrState) && (openCurrState != openPrevState)) {
-             openPosition = !openPosition;
-             }
-             openPrevState = openCurrState;
-             if (openPosition) {
-             OPEN_RIGHT = 0.2;
-             } else {
-             OPEN_RIGHT = 1.0;
-             }
-             */
-            
+            // update previous state variable.
+            clawPrevState = clawCurrState;
+            if (clawServo) {
+                robot.liftServo.setPosition(CLOSE);   //set servos to closed position
+            } else {
+                robot.liftServo.setPosition(OPEN); //set servos to open position
+            }
             
         }
         
         
     }
-    
-    
     
     
 }
